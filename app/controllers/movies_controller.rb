@@ -9,18 +9,27 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
     # puts("Hi")
-  
+    
+    params_sort = params[:sort]
     
     
-    if params[:sort] == "title"
-      @movie_hilite = "hilite"
-      @movies = Movie.getSortedTitle
-      # @movies = @movies.sort { |a,b| a.title <=> b.title }
-      # puts("Bye")
-    elsif params[:sort] == "release"
-      @release_hilite = "hilite"
-      @movies = Movie.getSortedRating
+    if params_sort == nil
+      @sort = session[:sort]
+      flash.keep
+      redirect_to movies_path(:sort)
+    else
+      session[:sort] = params_sort
+    end
+
+   
+    if session[:sort] == "title"
+        @movie_hilite = "hilite"
+        @movies = Movie.getSortedTitle
+    elsif session[:sort] == "release"
+        @release_hilite = "hilite"
+        @movies = Movie.getSortedRating 
     end  
+      
     
     
     
